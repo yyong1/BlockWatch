@@ -302,6 +302,112 @@ section{
   line-height: 1.8;
 }
 
+/* reviews section */
+
+.reviews .flex{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.reviews .flex .content{
+  flex: 1 1 40rem;
+}
+
+.reviews .flex .content h3{
+  font-size: 3rem;
+  color: var(--white);
+  margin-bottom: .5rem;
+}
+
+.reviews .flex .content p{
+  line-height: 1.8;
+  font-size: 1.6rem;
+  color: var(--light-white);
+  padding: 1rem 0;
+}
+
+.reviews .flex .content .controls{
+  margin-top: .5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.reviews .flex .content .controls div{
+  width: 5rem;
+  height: 5rem;
+  line-height: 4.9rem;
+  font-size: 2.5rem;
+  color: var(--white);
+  background: var(--bg-color);
+  text-align: center;
+  cursor: pointer;
+}
+
+.reviews .flex .content .controls div:hover{
+  background: var(--gradient);
+}
+
+.reviews .flex .slides-container{
+  flex: 1 1 40rem;
+}
+
+.reviews .flex .slides-container .slide{
+  background: var(--bg-color);
+  padding: 2.5rem;
+  display: none;
+}
+
+.reviews .flex .slides-container .slide.active{
+  display: block;
+}
+
+.reviews .flex .slides-container .slide .text{
+  font-size: 1.6rem;
+  color: var(--light-white);
+  line-height: 1.8;
+}
+
+.reviews .flex .slides-container .slide .user{
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: var(--border)
+}
+
+.reviews .flex .slides-container .slide .user img{
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reviews .flex .slides-container .slide .user h3{
+  font-size: 2rem;
+  color: var(--white);
+}
+
+.reviews .flex .slides-container .slide .user .stars{
+  margin-top: .5rem;
+}
+
+.reviews .flex .slides-container .slide .user .stars i{
+  font-size: 1.5rem;
+  color: coral;
+}
+
+.reviews .flex .slides-container .slide .user .fa-quote-right{
+  font-size: 5rem;
+  color: transparent;
+  background: var(--gradient);
+  background-clip: text;
+  margin-left: auto;
+}
+
+
 
 /* --- media queries --- */
 
