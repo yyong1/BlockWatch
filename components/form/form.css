@@ -1,0 +1,90 @@
+
+/* form login reg */
+.form-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+}
+
+.form-section .container-form {
+  width: 35rem;
+  height: 50rem;
+  background: var(--bg-color);
+  box-shadow: var(--box-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style the grid layout containing forms */
+.form-section .container-form .signin-signup {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+/* Style the forms and hide the sign-up form initially */
+.signin-signup form {
+  grid-column: 1 / 2;
+  grid-row: 1/2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+form.sign-up-form {
+  visibility: hidden;
+}
+/* Style form titles, input fields, icons, and buttons */
+.title {
+  font-size: 3.5rem;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+.input-field {
+  width: 28rem;
+  height: 5rem;
+  border-bottom: .1rem solid var(--light-white);
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+}
+.input-field i {
+  flex: 1;
+  text-align: center;
+  font-size: 2rem;
+  color: var(--light-white);
+}
+.input-field input {
+  flex: 5;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1.8rem;
+  color: var(--white);
+  font-weight: 600;
+}
+/* Style paragraphs and links */
+form p,
+a {
+  font-size: 1.4rem;
+  color: var(--white);
+}
+.forgot-password {
+  align-self: flex-end;
+}
+.btn-form {
+  margin: 2rem
+}
+
+.account-text {
+  color: var(--white);
+}
+/* Make the sign-up form visible when in sign-up mode */
+.container.sign-up-mode form.sign-up-form {
+  visibility: visible;
+}
+/* Hide the sign-in form when in sign-up mode */
+.container.sign-up-mode form.sign-in-form {
+  visibility: hidden;
+}

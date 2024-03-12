@@ -273,6 +273,7 @@ section{
   align-items: center;
   flex-wrap: wrap;
   gap: 2rem;
+  /* margin: 0 30rem; */
 }
 
 .about .flex .content{
@@ -532,11 +533,7 @@ a {
 .btn-form {
   margin: 2rem
 }
-/* .btn:hover {
-  color: #333;
-  border: none;
-  background: #999; */
-/* } */
+
 .account-text {
   color: var(--white);
 }
@@ -548,6 +545,8 @@ a {
 .container.sign-up-mode form.sign-in-form {
   visibility: hidden;
 }
+
+
 
 /* --- media queries --- */
 
