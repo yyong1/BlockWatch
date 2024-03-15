@@ -1,0 +1,29 @@
+.header{
+  position: sticky;
+  top: 0; left: 0; right: 0;
+  background-color: var(--bg-color);
+  border-bottom: var(--border);
+  box-shadow: var(--box-shadow);
+  z-index: 1000;
+}
+
+.header .flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+}
+
+.header .flex .logo{
+  font-size: 2rem;
+  color: var(--white);
+}
+
+.header .flex .logo i{
+  margin-right: .5rem;
+  color: coral;
+}
+
+.header .flex .btn{
+  margin-top: 0;
+}
