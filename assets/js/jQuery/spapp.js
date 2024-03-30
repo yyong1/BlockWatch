@@ -20,6 +20,21 @@ $(document).ready(function () {
         load: "home.html",
     });
 
+    app.route({
+        view: "stocklist",
+        load: "stocklist.html",
+    });
+
+    app.route({
+        view: "fav",
+        load: "fav.html",
+    });
+
+    app.route({
+        view: "account",
+        load: "account.html",
+    });
+
 
     app.run();
 

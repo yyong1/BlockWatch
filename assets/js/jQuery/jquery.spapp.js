@@ -45,7 +45,7 @@
                 return;
             }
 
-            // Clear the content of previously created section because this library is broken and is not good
+            // Clear the content of previously created section
 
 
             if (config.reloadView) {
