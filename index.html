@@ -10,16 +10,16 @@
 </head>
 <body>
   
-  <header class="header">
-    <section class="flex">
+  <header class="header-custom">
+    <section class="flex-custom">
       <a href="#home" class="logo"><i class="fas fa-money-bill-trend-up"></i>BlockWatch</a>
-      <a href="#download" class="btn">dw app</a>
+      <a href="#login" class="btn-custom">Auth</a>
     </section>
   </header>
 
-  <div class="navbar">
-    <nav class="nav">
-      <a href="#home" class="nav-link"><i class="fas fa-home"></i><span>home</span></a>
+  <div class="navbar-custom">
+    <nav class="nav-custom">
+      <!-- <a href="#home" class="nav-link"><i class="fas fa-home"></i><span>home</span></a> -->
       <a href="#about" class="nav-link"><i class="fas fa-circle-info"></i><span>about</span></a>
       <a href="#download" class="nav-link"><i class="fas fa-download"></i><span>download</span></a>
       <a href="#pricing" class="nav-link"><i class="fas fa-comment-dollar"></i><span>contact</span></a>
@@ -30,12 +30,12 @@
   
 
   <main id="spapp" role="main">
-    <section id="home"></section>
-    <section id="login"></section>
-    <section id="register"></section>
-    <section id="account"></section>
-    <section id="stocklist"></section>
-    <section id="fav"></section>
+    <section id="home" data-load="home.html"></section>
+    <section id="login" data-load="login.html"></section>
+    <section id="register" data-load="register.html"></section>
+    <section id="account" data-load="account.html"></section>
+    <section id="stocklist" data-load="stocklist.html"></section>
+    <section id="fav" data-load="fav.html"></section>
     <!-- <section id="error_404"><h1 class="text-info d-none">Page not found</h1></section> -->
   </main>
 

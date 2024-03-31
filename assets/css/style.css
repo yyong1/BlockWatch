@@ -35,6 +35,10 @@ body{
   background: var(--black);
   padding-bottom: 8rem;
 }
+body main{
+  background: var(--black);
+  padding-bottom: 8rem;
+}
 
 section{
   padding: 3rem 2rem;
@@ -42,7 +46,7 @@ section{
   margin: 0 auto;
 }
 
-.btn{
+.btn-custom{
   display: inline-block;
   margin-top: 1rem;
   cursor: pointer;
@@ -54,7 +58,7 @@ section{
   transition: .3s linear;
 }
 
-.btn:hover{
+.btn-custom:hover{
   background: var(--white);
   color: var(--black);
 }
@@ -76,7 +80,7 @@ section{
   background-color: transparent;
 }
 
-.header{
+.header-custom{
   position: sticky;
   top: 0; left: 0; right: 0;
   background-color: var(--bg-color);
@@ -85,31 +89,31 @@ section{
   z-index: 1000;
 }
 
-.header .flex{
+.header-custom .flex-custom{
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
 }
 
-.header .flex .logo{
+.header-custom .flex-custom .logo{
   font-size: 2rem;
   color: var(--white);
 }
 
-.header .flex .logo i{
+.header-custom .flex-custom .logo i{
   margin-right: .5rem;
   color: coral;
 }
 
-.header .flex .btn{
+.header-custom .flex-custom .btn-custom{
   margin-top: 0;
 }
 
 
 /* --- navbar --- */
 
-.navbar{
+.navbar-custom{
   position: fixed;
   bottom: 2rem; left: 0; right: 0;
   display: flex;
@@ -117,7 +121,7 @@ section{
   z-index: 1000;
 }
 
-.navbar .nav{
+.navbar-custom .nav-custom{
   padding: 1rem;
   background-color: var(--bg-color);
   border: var(--border);
@@ -130,7 +134,7 @@ section{
   border-radius: .5rem;
 }
 
-.navbar .nav a{
+.navbar-custom .nav-custom a{
   font-size: 1.7rem;
   padding: 1rem 2rem;
   border-radius: .5rem;
@@ -138,7 +142,7 @@ section{
   color: var(--white);
 }
 
-.navbar .nav a:hover{
+.navbar-custom .nav-custom a:hover{
   background: var(--gradient);
 }
 /* 
@@ -146,27 +150,27 @@ section{
   color: var(--white);
 } */
 
-.navbar .nav a i {
+.navbar-custom .nav-custom a i {
   display: none;
 }
 
 
 /* home section */
 
-.home .flex{
+.home .flex-custom{
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 2rem;
 }
 
-.home .flex .image{
+.home .flex-custom .image{
   flex: 1 1 30rem;
   position: relative;
   overflow: hidden;
 }
 
-.home .flex .image::before{
+.home .flex-custom .image::before{
   content: '';
   position: absolute;
   top: 0; left: 0;
@@ -176,7 +180,7 @@ section{
   animation: animate1 4s cubic-bezier(0.29, 1, 0.26, 1.12) infinite;
 }
 
-.home .flex .image::after{
+.home .flex-custom .image::after{
   content: '';
   position: absolute;
   bottom: 0; right: 0;
@@ -186,22 +190,22 @@ section{
   animation: animate2 4s cubic-bezier(0.29, 1, 0.26, 1.12) infinite;
 }
 
-.home .flex .image img{
+.home .flex-custom .image img{
   width: 100%;
   height: 50rem;
   object-fit: contain;
 }
-.home .flex .content{
+.home .flex-custom .content{
   flex: 1 1 50rem;
 }
 
-.home .flex .content h3{
+.home .flex-custom .content h3{
   font-size: 3rem;
   color: var(--white);
   text-transform: uppercase;
   margin-bottom: .5rem;
 }
-.home .flex .content p{
+.home .flex-custom .content p{
   line-height: 1.8;
   padding: 1rem 0;
   font-size: 1.6rem;
@@ -271,7 +275,7 @@ section{
   background: var(--bg-color);
 }
 
-.about .flex{
+.about .flex-custom{
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -279,27 +283,27 @@ section{
   /* margin: 0 30rem; */
 }
 
-.about .flex .content{
+.about .flex-custom .content{
   flex: 1 1 40rem;
 }
 
-.about .flex .image{
+.about .flex-custom .image{
   flex: 1 1 40rem;
 }
 
-.about .flex .image img{
+.about .flex-custom .image img{
   width: 100%;
   height: 50rem;
   object-fit: contain;
 }
 
-.about .flex .content h3{
+.about .flex-custom .content h3{
   font-size: 3rem;
   color: var(--white);
   margin-bottom: .5rem;
 }
 
-.about .flex .content p{
+.about .flex-custom .content p{
   font-size: 1.6rem;
   color: var(--light-white);
   padding: 1rem 0;
@@ -308,37 +312,37 @@ section{
 
 /* reviews section */
 
-.reviews .flex{
+.reviews .flex-custom{
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 2rem;
 }
 
-.reviews .flex .content{
+.reviews .flex-custom .content{
   flex: 1 1 40rem;
 }
 
-.reviews .flex .content h3{
+.reviews .flex-custom .content h3{
   font-size: 3rem;
   color: var(--white);
   margin-bottom: .5rem;
 }
 
-.reviews .flex .content p{
+.reviews .flex-custom .content p{
   line-height: 1.8;
   font-size: 1.6rem;
   color: var(--light-white);
   padding: 1rem 0;
 }
 
-.reviews .flex .content .controls{
+.reviews .flex-custom .content .controls{
   margin-top: .5rem;
   display: flex;
   gap: 1rem;
 }
 
-.reviews .flex .content .controls div{
+.reviews .flex-custom .content .controls div{
   width: 5rem;
   height: 5rem;
   line-height: 4.9rem;
@@ -349,31 +353,31 @@ section{
   cursor: pointer;
 }
 
-.reviews .flex .content .controls div:hover{
+.reviews .flex-custom .content .controls div:hover{
   background: var(--gradient);
 }
 
-.reviews .flex .slides-container{
+.reviews .flex-custom .slides-container{
   flex: 1 1 40rem;
 }
 
-.reviews .flex .slides-container .slide{
+.reviews .flex-custom .slides-container .slide{
   background: var(--bg-color);
   padding: 2.5rem;
   display: none;
 }
 
-.reviews .flex .slides-container .slide.active{
+.reviews .flex-custom .slides-container .slide.active{
   display: block;
 }
 
-.reviews .flex .slides-container .slide .text{
+.reviews .flex-custom .slides-container .slide .text{
   font-size: 1.6rem;
   color: var(--light-white);
   line-height: 1.8;
 }
 
-.reviews .flex .slides-container .slide .user{
+.reviews .flex-custom .slides-container .slide .user{
   margin-top: 1.5rem;
   display: flex;
   align-items: center;
@@ -382,28 +386,28 @@ section{
   border-top: var(--border)
 }
 
-.reviews .flex .slides-container .slide .user img{
+.reviews .flex-custom .slides-container .slide .user img{
   width: 7rem;
   height: 7rem;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.reviews .flex .slides-container .slide .user h3{
+.reviews .flex-custom .slides-container .slide .user h3{
   font-size: 2rem;
   color: var(--white);
 }
 
-.reviews .flex .slides-container .slide .user .stars{
+.reviews .flex-custom .slides-container .slide .user .stars{
   margin-top: .5rem;
 }
 
-.reviews .flex .slides-container .slide .user .stars i{
+.reviews .flex-custom .slides-container .slide .user .stars i{
   font-size: 1.5rem;
   color: coral;
 }
 
-.reviews .flex .slides-container .slide .user .fa-quote-right{
+.reviews .flex-custom .slides-container .slide .user .fa-quote-right{
   font-size: 5rem;
   color: transparent;
   background: var(--gradient);
@@ -567,11 +571,11 @@ a {
     padding-bottom: 7rem;
   }
 
-  .navbar{
+  .navbar-custom{
     bottom: 1rem;
   }
 
-  .navbar .nav{
+  .navbar-custom .nav-custom{
     border-bottom: 0;
     border-left: 0;
     border-right: 0;
@@ -581,28 +585,28 @@ a {
     width: 100%;
   }
 
-  .navbar .nav a{ 
+  .navbar-custom .nav-custom a{ 
     padding: .5rem;
   }
 
-  .navbar .nav a span{
+  .navbar-custom .nav-custom a span{
     font-size: 1.5rem;
   }
 
-  .navbar .nav a i{
+  .navbar-custom .nav-custom a i{
     display: block;
     font-size: 3rem;
     margin-bottom: .5rem;
   }
   
-  .navbar .nav a:hover{
+  .navbar-custom .nav-custom a:hover{
     background: none;
   }
 
-  .navbar .nav a:hover span{
+  .navbar-custom .nav-custom a:hover span{
     color: coral;
   }
-  .home .flex .content h3{
+  .home .flex-custom .content h3{
     font-size: 2.5rem;
   }
 }
