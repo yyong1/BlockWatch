@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "username": "john_doe",
+      "email": "john.doe@example.com",
+      "phone": "1234567890",
+      "full_name": "John Doe",
+      "password": "password123",
+      "last_login": "2022-01-01 10:00:00"
+    },
+    {
+      "username": "jane_smith",
+      "email": "jane.smith@example.com",
+      "phone": "9876543210",
+      "full_name": "Jane Smith",
+      "password": "qwerty456",
+      "last_login": "2022-01-02 15:30:00"
+    },
+    {
+      "username": "bob_johnson",
+      "email": "bob.johnson@example.com",
+      "phone": "5555555555",
+      "full_name": "Bob Johnson",
+      "password": "abc123",
+      "last_login": "2022-01-03 08:45:00"
+    }
+  ]
+}
