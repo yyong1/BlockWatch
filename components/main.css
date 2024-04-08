@@ -10,6 +10,7 @@
   --box-shadow: 0 .5rem 1rem #000;
   --border: .5rem solid rgba(255, 255, 255, .1);
   --gradient: linear-gradient(65deg, deeppink, coral);
+  --secondary-gradient: linear-gradient(65deg, #891652, #240A34);
 }
 
 *{
@@ -51,7 +52,7 @@ section{
   transition: .3s linear;
 }
 
-.btn:hover{
+.btn:hover, .btn-secondary:hover{
   background: var(--white);
   color: var(--black);
 }
