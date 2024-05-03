@@ -1,0 +1,32 @@
+<div class="form-section" id="auth">
+  <div class="container-form">
+    <div class="signin-signup">
+      <form class="sign-up-form" id="sign-up-form">
+        <h2 class="title" style="font-size: 2.5rem">User Detail</h2>
+        <div class="input-field">
+          <i class="fas fa-user"></i>
+          <input name="username" id="acc-username" type="text" readonly />
+        </div>
+        <div class="input-field">
+          <i class="fas fa-envelope"></i>
+          <input name="email" id="acc-email" type="text" readonly />
+        </div>
+      </form>
+      <a href="#change-password" class="account-text" id="sign-up-link"
+        >Change Password</a
+      >
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const emailValue = localStorage.getItem("loggedInUserEmail");
+    const usernameValue = localStorage.getItem("loggedInUser");
+
+    if (emailValue && usernameValue) {
+      document.getElementById("acc-email").value = emailValue;
+      document.getElementById("acc-username").value = usernameValue;
+    }
+  });
+</script>
