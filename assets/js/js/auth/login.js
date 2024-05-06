@@ -1,52 +1,41 @@
-$(document).on('spapp:page:load', '#login', function () {
-  console.log('login page loaded');
-  $('#sign-in-form').validate({
-    rules: {
-      username: {
-        required: true
-      },
-      password: {
-        required: true
-      }
-    },
-    messages: {
-      username: {
-        required: "Please enter your username"
-      },
-      password: {
-        required: "Please enter your password"
-      }
-    },
-    submitHandler: function (form) {
-      console.log('here');
-      var data = $(form).serialize();
-      $.ajax({
-        url: 'userlog.json',
-        type: 'GET',
-        dataType: 'json',
-        data: data,
-        success: function (response) {
-          console.log('in success');
-          var users = response.users;
-          var username = $('#username').val();
-          var password = $('#password').val();
-          var validUser = users.find(user => user.username === username && user.password === password);
-          console.log('here');
-          if (validUser) {
-            console.log('in if');
-            // window.location.href = 'account.html';
-          } else {
-            alert('Invalid username or password');
-          }
-        },
-        error: function (xhr, status, error) {
-          console.log('in err');
+document.getElementById('sign-in-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    var userData = localStorage.getItem('userData');
+    var users = userData ? JSON.parse(userData) : [];
+    var user = users.find(function(user) {
+        return user.username === username && user.password === password;
+    });
+    if (user) {
 
-          console.error({ xhr, status, error });
-          const errorMessage = xhr.responseText ? JSON.parse(xhr.responseText).message : 'Unknown error';
-          alert(errorMessage);
-        }
-      });
+
+
+        $("#sign-in-btn").html('<i class="fa fa-spinner fa-spin"></i>');
+
+        setTimeout(function() { 
+            localStorage.setItem("loggedInUser", username);
+            localStorage.setItem("loggedInUserEmail", user.email); // Save user's email
+            localStorage.setItem("loginTime", Date.now()); 
+            document.getElementById('error-call').style.display = "none";
+            document.getElementById('success-call').style.display = "block";
+             
+            $("#sign-in-btn").html("Login");
+            setTimeout(function() {
+                window.location.hash = 'account';   
+            }, 3000);    
+            document.getElementById('nav-login').setAttribute('href', '#account');
+            document.getElementById('top-login').removeAttribute('href');
+            document.getElementById('top-login').innerText = 'Logout'; 
+            document.getElementById('top-login').setAttribute('id',"logout")
+
+            
+        }, 3000); // 2000 milliseconds (2 seconds) delay
+    } else {
+        console.log("User not found"); // Debug statement
+        document.getElementById('error-call').style.display = "block";
+        document.getElementById('success-call').style.display = "none";
     }
-  });
+
+    return false;
 });
