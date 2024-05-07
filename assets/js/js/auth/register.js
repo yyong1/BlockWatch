@@ -54,6 +54,3 @@ var SignUpForm = {
         return false;
     }
 };
-
-// Initialize the SignUpForm object
-SignUpForm.init();

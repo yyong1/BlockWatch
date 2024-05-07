@@ -1,3 +1,4 @@
+
 var SignInForm = {
     init: function() {
         document.getElementById('sign-in-form').addEventListener('submit', this.handleSubmit.bind(this));
@@ -39,6 +40,6 @@ var SignInForm = {
         return false;
     }
 };
-
 // Initialize the SignInForm object
-SignInForm.init();
+
+
