@@ -27,7 +27,7 @@ class AuthService extends BaseService
         if (hash('sha256', $data['password']) == $user['passwordhash']) {
             $jwtPayload = ['id' => $user['user_id'], 'email' => $user['email'], 'username' => $user['username'], 'createdate' => $user['createdate']];
             $jwt = JWT::encode($jwtPayload, JWT_SECRET, 'HS256');
-            return Flight::json(['token' => $jwt]);
+            return Flight::json(['token' => $jwt, 'user' => ['id' => $user['user_id'], 'email' => $user['email'], 'username' => $user['username']]]);
         } else {
             return Flight::halt(401, json_encode(['message' => 'Incorrect Credentials']));
         }
@@ -44,7 +44,7 @@ class AuthService extends BaseService
         $user = parent::add(['email' => $data['email'], 'passwordhash' => hash('sha256', $data['password']), 'username' => $data['username'], 'createdate' => $data['createdate']]);
         $jwtPayload = ['id' => $user['id'], 'email' => $user['email'], 'username' => $user['username'], 'createdate' => $user['createdate']];
         $jwt = JWT::encode($jwtPayload, JWT_SECRET, 'HS256');
-        return Flight::json(['token' => $jwt]);
+        return Flight::json(['token' => $jwt, 'user' => ['id' => $user['id'], 'email' => $user['email'], 'username' => $user['username']]]);
     }
 
     public function logout()

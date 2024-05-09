@@ -1,56 +1,40 @@
 var SignUpForm = {
-    init: function() {
+    init: function () {
         document.getElementById('sign-up-form').addEventListener('submit', this.handleSubmit.bind(this));
     },
-    handleSubmit: function(event) {
+    handleSubmit: function (event) {
         event.preventDefault();
 
         var username = document.getElementById('username').value;
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
 
-        var existingData = localStorage.getItem('userData');
-        var existingUsers = existingData ? JSON.parse(existingData) : [];
+        Utils.block_ui('#sign-up-form');
 
-        if (!Array.isArray(existingUsers)) {
-            existingUsers = [];
-        }
+        var newUser = {
+            username: username,
+            email: email,
+            password: password
+        };
 
-        var userExists = existingUsers.some(function(user) {
-            return user.username === username || user.email === email;
+        RestClient.post('/auth/signup', JSON.stringify(newUser), function (response) {
+            Utils.unblock_ui('#sign-up-form');
+            console.log("Reg successful", response);
+            localStorage.setItem('user', JSON.stringify(response.user));
+            localStorage.setItem('token', response.token);
+            location.replace('#stocklist');
+        }, function (jqXHR) {
+            Utils.unblock_ui('#sign-up-form');
+            console.error(jqXHR);
+            document.getElementById('error-call').style.display = "block";
+            document.getElementById('error-call').innerHTML = jqXHR.responseJSON.message;
         });
 
-        if (userExists) {
-            document.getElementById('error-call').style.display = "block";
-        } else {
-            var newUser = {
-                username: username,
-                email: email,
-                password: password
-            };
-            existingUsers.push(newUser);
-            localStorage.setItem('userData', JSON.stringify(existingUsers));
+        document.getElementById('username').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
 
-            // Clear form fields
-            document.getElementById('username').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
+        $("#sign-up-button").html('<i class="fa fa-spinner fa-spin"></i>');
 
-            // Show success message
-
-            $("#sign-up-button").html('<i class="fa fa-spinner fa-spin"></i>');
-
-            setTimeout(function() { 
-                document.getElementById('error-call').style.display = "none";
-                document.getElementById('success-call').style.display = "block";
-                $("#sign-up-button").html("Sign Up");
-                setTimeout(function() {
-                    window.location.hash = 'login';
-                }, 3000);
-                
-            }, 3000); // 2000 milliseconds (2 seconds) delay
-        }
-
-        return false;
     }
 };

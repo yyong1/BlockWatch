@@ -1,45 +1,48 @@
-
 var SignInForm = {
     init: function() {
         document.getElementById('sign-in-form').addEventListener('submit', this.handleSubmit.bind(this));
     },
     handleSubmit: function(event) {
         event.preventDefault();
-        var username = document.getElementById('username').value;
+
+        var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
-        var userData = localStorage.getItem('userData');
-        var users = userData ? JSON.parse(userData) : [];
-        var user = users.find(function(user) {
-            return user.username === username && user.password === password;
-        });
-        if (user) {
-            $("#sign-in-btn").html('<i class="fa fa-spinner fa-spin"></i>');
-
-            setTimeout(function() { 
-                localStorage.setItem("loggedInUser", username);
-                localStorage.setItem("loggedInUserEmail", user.email); // Save user's email
-                localStorage.setItem("loginTime", Date.now()); 
-                document.getElementById('error-call').style.display = "none";
-                document.getElementById('success-call').style.display = "block";
-
-                $("#sign-in-btn").html("Login");
-                setTimeout(function() {
-                    window.location.hash = 'account';   
-                }, 3000);    
-                document.getElementById('nav-login').setAttribute('href', '#account');
-                document.getElementById('top-login').removeAttribute('href');
-                document.getElementById('top-login').innerText = 'Logout'; 
-                document.getElementById('top-login').setAttribute('id',"logout")
-            }, 3000); // 2000 milliseconds (2 seconds) delay
-        } else {
-            console.log("User not found"); // Debug statement
-            document.getElementById('error-call').style.display = "block";
-            document.getElementById('success-call').style.display = "none";
+        
+        if (Utils.get_from_localstorage('user')) {
+            console.log("User already logged in");
+            location.replace('#stocklist');
+        }
+        if (!email || !password) {
+            console.error("Email and password must be provided");
+            return;
         }
 
-        return false;
+
+        Utils.block_ui('#sign-in-form');
+
+        var userData = {
+            email: email,
+            password: password
+        };
+        console.log("userData", JSON.stringify(userData));
+
+        RestClient.post('/auth/login', JSON.stringify(userData), function (response) {
+            console.log("Login successful", response);
+            Utils.unblock_ui('#sign-in-form');
+
+            localStorage.setItem('user', JSON.stringify(response.user));
+            localStorage.setItem('token', response.token);
+            location.replace('#stocklist');
+        }, function (jqXHR) {
+            Utils.unblock_ui('#sign-in-form');
+            console.log("Login failed:", jqXHR);
+            console.error("Login failed:", jqXHR);
+            document.getElementById('error-call').style.display = "block";
+            document.getElementById('error-call').innerHTML = (jqXHR.responseJSON && jqXHR.responseJSON.message) ? jqXHR.responseJSON.message : "An unknown error occurred";
+        });
+
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        $("#sign-in-btn").html('<i class="fa fa-spinner fa-spin"></i>');
     }
 };
-// Initialize the SignInForm object
-
-
