@@ -6,8 +6,8 @@
  *   description="Web programming API",
  *   version="1.0",
  *   @OA\Contact(
- *     email="becir.isakovic@ibu.edu.ba",
- *     name="Becir Isakovic"
+ *     email="andrei.baranov@ibu.edu.ba",
+ *     name="Andrei Baranov"
  *   )
  * ),
  * @OA\OpenApi(
