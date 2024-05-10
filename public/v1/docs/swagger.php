@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../../../../vendor/autoload.php';
+require __DIR__ . '/../../../vendor/autoload.php';
 
 define('BASE_URL', 'http://localhost:8888/BlockWatch/rest/');
 
@@ -10,6 +10,6 @@ $openapi = \OpenApi\Generator::scan(['../../../rest', './'], ['pattern' => '*.ph
 // $openapi = \OpenApi\Util::finder(['../../../rest/routes', './'], NULL, '*.php');
 // $openapi = \OpenApi\scan(['../../../rest', './'], ['pattern' => '*.php']);
 
-header('Content-Type: application/x-yaml');
-echo $openapi->toYaml();
+header('Content-Type: application/json');
+echo $openapi->toJson();
 ?>

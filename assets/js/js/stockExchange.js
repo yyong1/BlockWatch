@@ -7,12 +7,13 @@ var Chart = {
             secondsVisible: false,
         }
     },
-
+    
     init: function () {
         this.initChart();
         this.bindTableInteractions();
         this.bindSearch();
         this.loadFavorites();
+        // this.loadCryptoData();
     },
 
     initChart: function () {
@@ -93,5 +94,34 @@ var Chart = {
                 $(this).find(".fa-heart").addClass("fas").removeClass("far");
             }
         });
+    },
+
+    loadCryptoData: function () {
+        const dataTable = document.getElementById('dataTable')
+        // RestClient.get()
+        fetch('crypto-data.json')
+            .then(response => response.json())
+            .then(data => populateTable(data))
+            .catch(error => console.error('Error loading the crypto data:', error));
+    },
+
+    populateTable: function (cryptos) {
+        const tbody = dataTable.getElementsByTagName('tbody')[0];
+        tbody.innerHTML = ''; // Clear existing rows
+
+        cryptos.forEach(crypto => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${crypto.id}</td>
+                <td><img src="${crypto.image}" alt="${crypto.name}"></td>
+                <td>${crypto.name}</td>
+                <td class="text-warning">${crypto.price}</td>
+                <td class="text-warning">${crypto.supply}</td>
+                <td class="text-warning">${crypto.marketCap}</td>
+                <td class="text-success">%${crypto.change} <i class="fa fa-arrow-up"></i></td>
+                <td class="text-success"><i class="fa-regular fa-heart" style="font-size: large;"></i></td>
+            `;
+        });
     }
+
 };

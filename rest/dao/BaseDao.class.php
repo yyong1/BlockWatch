@@ -138,4 +138,9 @@ class BaseDao
                          ORDER BY {$order_column} {$order_direction}
                          LIMIT {$limit} OFFSET {$offset}", []);
     }
+
+    public function delete($id)
+    {
+        $this->execute("DELETE FROM " . $this->table . " WHERE id = :id", ["id" => $id]);
+    }
 }
