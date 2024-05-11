@@ -32,7 +32,6 @@ class BaseDao
                 break;
             default:
                 throw new Exception("Invalid order format. First character should be either + or -");
-                break;
         };
 
         // Filter SQL injection attacks on column name

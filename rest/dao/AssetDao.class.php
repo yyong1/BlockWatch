@@ -26,4 +26,9 @@ class AssetDao extends BaseDao{
         return $this->delete($id);
     }
 
+    public function get_asset_symbol()
+    {
+        return $this->query_unique("SELECT symbol FROM assets", []);
+    }
+
 }
