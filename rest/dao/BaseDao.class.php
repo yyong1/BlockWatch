@@ -1,48 +1,14 @@
 <?php
 require_once dirname(__FILE__) . "/../config.php";
 
-class BaseDao
-{
+class BaseDao {
     protected $connection;
-
     private $table;
+    private $primaryKey; // Dynamically set primary key field
 
-    public function begin_transaction()
-    {
-        $response = $this->connection->beginTransaction();
-    }
-
-    public function commit()
-    {
-        $this->connection->commit();
-    }
-
-    public function rollback()
-    {
-        $response = $this->connection->rollBack();
-    }
-    public function parse_order($order)
-    {
-        switch (substr($order, 0, 1)) {
-            case '-':
-                $order_direction = "ASC";
-                break;
-            case '+':
-                $order_direction = "DESC";
-                break;
-            default:
-                throw new Exception("Invalid order format. First character should be either + or -");
-        };
-
-        // Filter SQL injection attacks on column name
-        $order_column = trim($this->connection->quote(substr($order, 1)), "'");
-
-        return [$order_column, $order_direction];
-    }
-
-    public function __construct($table)
-    {
+    public function __construct($table, $primaryKey = 'id') {
         $this->table = $table;
+        $this->primaryKey = $primaryKey; // Allow setting of primary key
         try {
             $this->connection = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8;port=" . DB_PORT, DB_USER, DB_PASS, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -54,92 +20,92 @@ class BaseDao
         }
     }
 
-    public function insert($table, $entity)
-    {
-        $query = "INSERT INTO {$table} (";
-        foreach ($entity as $column => $value) {
-            $query .= $column . ", ";
-        }
-        $query = substr($query, 0, -2);
-        $query .= ") VALUES (";
-        foreach ($entity as $column => $value) {
-            $query .= ":" . $column . ", ";
-        }
-        $query = substr($query, 0, -2);
-        $query .= ")";
-
-        $stmt = $this->connection->prepare($query);
-        $stmt->execute($entity);
-        $entity['id'] = $this->connection->lastInsertId();
-        return $entity;
+    public function begin_transaction() {
+        $this->connection->beginTransaction();
     }
 
-    protected function execute_update($table, $id, $entity, $id_column = "id")
-    {
-        $query = "UPDATE {$table} SET ";
-        foreach ($entity as $name => $value) {
-            $query .= $name . "= :" . $name . ", ";
-        }
-        $query = substr($query, 0, -2);
-        $query .= " WHERE {$id_column} = :id";
+    public function commit() {
+        $this->connection->commit();
+    }
 
+    public function rollback() {
+        $this->connection->rollBack();
+    }
+
+    public function parse_order($order) {
+        $direction = str_starts_with($order, '-') ? 'ASC' : 'DESC';
+        $column = ltrim($order, '+-');
+        return [$column, $direction];
+    }
+
+    public function insert($entity) {
+        $keys = array_keys($entity);
+        $fields = implode(', ', $keys);
+        $placeholders = ':' . implode(', :', $keys);
+
+        $query = "INSERT INTO {$this->table} ($fields) VALUES ($placeholders)";
         $stmt = $this->connection->prepare($query);
-        $entity['id'] = $id;
+        $stmt->execute($entity);
+        return $this->connection->lastInsertId();
+    }
+
+    protected function execute_update($id, $entity) {
+        $assignments = array_map(function($field) {
+            return "$field = :$field";
+        }, array_keys($entity));
+
+        $query = "UPDATE {$this->table} SET " . implode(', ', $assignments) . " WHERE {$this->primaryKey} = :primaryKey";
+        $entity['primaryKey'] = $id; // Add primary key to entity for binding
+        $stmt = $this->connection->prepare($query);
         $stmt->execute($entity);
     }
 
-    protected function query($query, $params)
-    {
+    public function execute($query, $params = []) {
+        $stmt = $this->connection->prepare($query);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    protected function query($query, $params = []) {
         $stmt = $this->connection->prepare($query);
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    protected function query_unique($query, $params)
-    {
-        $results = $this->query($query, $params);
-        return reset($results);
+    protected function query_unique($query, $params = []) {
+        $result = $this->query($query, $params);
+        return reset($result);
     }
 
-    protected function execute($query, $params)
-    {
-        $prepared_statement = $this->connection->prepare($query);
-        if ($params) {
-            foreach ($params as $key => $param) {
-                $prepared_statement->bindValue($key, $param);
-            }
-        }
-        $prepared_statement->execute();
-        return $prepared_statement;
+    public function add($entity) {
+        return $this->insert($entity);
     }
 
-    public function add($entity)
-    {
-        return $this->insert($this->table, $entity);
+    public function update($id, $entity) {
+        $this->execute_update($id, $entity);
     }
 
-    public function update($id, $entity)
-    {
-        $this->execute_update($this->table, $id, $entity);
+    public function get_by_id($id) {
+        $query = "SELECT * FROM {$this->table} WHERE {$this->primaryKey} = :primaryKey";
+        return $this->query_unique($query, ['primaryKey' => $id]);
     }
 
-    public function get_by_id($id)
-    {
-        return $this->query_unique("SELECT * FROM " . $this->table . " WHERE id = :id", ["id" => $id]);
+    public function get_all($offset = 0, $limit = 25, $order = null) {
+        $order_clause = $order ? " ORDER BY " . implode(' ', $this->parse_order($order)) : "";
+        $query = "SELECT * FROM {$this->table}{$order_clause} LIMIT :limit OFFSET :offset";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function get_all($offset = 0, $limit = 25, $order = "-id")
-    {
-        list($order_column, $order_direction) = self::parse_order($order);
-
-        return $this->query("SELECT *
-                         FROM " . $this->table . "
-                         ORDER BY {$order_column} {$order_direction}
-                         LIMIT {$limit} OFFSET {$offset}", []);
-    }
-
-    public function delete($id)
-    {
-        $this->execute("DELETE FROM " . $this->table . " WHERE id = :id", ["id" => $id]);
+    public function delete($id) {
+        $query = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = :primaryKey";
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute(['primaryKey' => $id]);
     }
 }
