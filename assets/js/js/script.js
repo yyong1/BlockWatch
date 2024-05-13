@@ -29,5 +29,4 @@ var UserAuth = {
     }
 };
 
-// Initialize the UserAuth object
 UserAuth.init();

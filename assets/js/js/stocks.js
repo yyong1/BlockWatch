@@ -1,6 +1,4 @@
-// chartModule.js
 const ChartModule = (function() {
-    // Private variables and functions
     const chartProperties = {
       width: 1500,
       height: 600,
@@ -14,7 +12,6 @@ const ChartModule = (function() {
     const chart = LightweightCharts.createChart(domElement, chartProperties);
     const candleSeries = chart.addCandlestickSeries();
   
-    // Public function to fetch and set candlestick data
     function setCandlestickData() {
       fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=1000`)
         .then(res => res.json())
@@ -30,10 +27,9 @@ const ChartModule = (function() {
           });
           candleSeries.setData(cdata);
         })
-        .catch(err => console.log(err)); // Using console.log directly
+        .catch(err => console.log(err));
     }
   
-    // Return public functions/variables
     return {
       setCandlestickData: setCandlestickData
     };

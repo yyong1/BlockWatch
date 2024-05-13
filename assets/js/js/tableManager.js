@@ -1,7 +1,6 @@
-// Manages interactions with the data table
 var TableManager = {
   init: function () {
-      this.loadCryptoData(); // Load data when initializing
+      this.loadCryptoData();
       this.bindTableInteractions();
       this.bindSearch();
   },
@@ -16,14 +15,14 @@ var TableManager = {
           })
           .then(data => {
               this.populateTable(data);
-              this.loadFavorites(); // Load favorites after data is populated
+              this.loadFavorites();
           })
           .catch(error => console.error('Error loading the crypto data:', error));
   },
 
   populateTable: function (assets) {
       const tbody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
-      tbody.innerHTML = ''; // Clear existing entries
+      tbody.innerHTML = '';
 
       assets.forEach((asset, index) => {
           const row = tbody.insertRow();
