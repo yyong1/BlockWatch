@@ -23,13 +23,12 @@ class AssetDao extends BaseDao {
         return $this->query("SELECT symbol FROM assets");
     }
 
-    // Fix the recursion issue by renaming the method
     public function updateAsset($id, $asset) {
-        parent::update($id, $asset); // Call the BaseDao update
+        $this->update($id, $asset);
     }
 
     public function deleteAsset($id) {
-        parent::delete($id); // Directly use the inherited method
+        $this->delete($id);
     }
 
     public function getAssetBySymbol($symbol) {
