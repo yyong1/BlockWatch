@@ -4,11 +4,11 @@ require_once dirname(__FILE__) . "/../config.php";
 class BaseDao {
     protected $connection;
     private $table;
-    private $primaryKey; // Dynamically set primary key field
+    private $primaryKey;
 
     public function __construct($table, $primaryKey = 'id') {
         $this->table = $table;
-        $this->primaryKey = $primaryKey; // Allow setting of primary key
+        $this->primaryKey = $primaryKey;
         try {
             $this->connection = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8;port=" . DB_PORT, DB_USER, DB_PASS, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

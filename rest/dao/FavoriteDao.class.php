@@ -32,6 +32,11 @@ class FavoriteDao extends BaseDao
       'asset_id' => $assetId
     ];
     $this->execute($query, $params);
+    $query_update = "UPDATE assets SET is_favorited = 1 WHERE asset_id = :asset_id";
+    $param = [
+      'asset_id' => $assetId
+    ];
+    $this->execute($query_update, $param);
   }
 
   public function removeFavorite($userId, $assetId)
@@ -42,5 +47,10 @@ class FavoriteDao extends BaseDao
       'asset_id' => $assetId
     ];
     $this->execute($query, $params);
+    $query_update = "UPDATE assets SET is_favorited = 0 WHERE asset_id = :asset_id";
+    $param = [
+      'asset_id' => $assetId
+    ];
+    $this->execute($query_update, $param);
   }
 }

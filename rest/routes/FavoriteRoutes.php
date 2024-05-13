@@ -9,7 +9,7 @@ Flight::group('/favorite', function () {
     }
   });
 
-  Flight::route('POST /favorite/@userId/@assetId', function ($userId, $assetId) {
+  Flight::route('POST /@userId/@assetId', function ($userId, $assetId) {
     if ($userId && $assetId) {
       Flight::favoriteService()->add_to_favorite($userId, $assetId);
       Flight::json(['message' => 'Added to favorites'], 200);
@@ -18,7 +18,7 @@ Flight::group('/favorite', function () {
     }
   });
 
-  Flight::route('DELETE /favorite/@userId/@assetId', function ($userId, $assetId) {
+  Flight::route('DELETE /@userId/@assetId', function ($userId, $assetId) {
     if ($userId && $assetId) {
       Flight::favoriteService()->remove_from_favorite($userId, $assetId);
       Flight::json(['message' => 'Removed from favorites'], 200);
