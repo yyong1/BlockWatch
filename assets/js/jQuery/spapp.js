@@ -23,18 +23,10 @@ $(document).ready(function () {
         load: "home.html",
     });
 
-    // app.route({
-    //     view: "stocklist",
-    //     load: "stocklist.html",
-    // });
     app.route({
         view: "stocklist",
         load: "stockexchange.html",
     });
-    // app.route({
-    //     view: "stocklist",
-    //     load: "exc.html",
-    // });
 
     app.route({
         view: "fav",
@@ -45,7 +37,6 @@ $(document).ready(function () {
         view: "account",
         load: "account.html",
     });
-
 
     app.run();
 

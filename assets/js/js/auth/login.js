@@ -32,6 +32,7 @@ var SignInForm = {
 
             localStorage.setItem('user', JSON.stringify(response.user));
             localStorage.setItem('token', response.token);
+            updateNavBasedOnAuth();
             location.replace('#stocklist');
         }, function (jqXHR) {
             Utils.unblock_ui('#sign-in-form');
