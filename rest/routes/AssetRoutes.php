@@ -4,28 +4,26 @@ require_once(__DIR__ . '/../middleware/Auth.class.php');
 Flight::group('/assets', function () {
     /**
      * @OA\Get(
-     *     path="/assets/",
-     *     tags={"Assets"},
-     *     summary="Retrieve all assets",
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of all assets",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Asset")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="No assets found",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="No assets found")
-     *         )
-     *     ),
-     *     security={{"bearerAuth": {}}}
+     *   path="/assets",
+     *   tags={"Assets"},
+     *   summary="Retrieve all assets",
+     *   description="This endpoint retrieves all assets.",
+     *   @OA\Response(
+     *     response=200,
+     *     description="Successful operation",
+     *     @OA\JsonContent(
+     *       type="array",
+     *       @OA\Items(ref="#/components/schemas/Asset")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="Unauthorized"
+     *   ),
+     *   security={{"bearerAuth":{}}}
      * )
      */
+
     Flight::route('GET /', function () {
         $data = Flight::assetService()->getAssets();
         if (!empty($data)) {

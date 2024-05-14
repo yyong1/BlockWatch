@@ -16,9 +16,12 @@
  *   )
  * )
  * @OA\SecurityScheme(
- *     securityScheme="ApiKey",
- *     type="apiKey",
- *     in="header",
- *     name="Authentication"
+ *   securityScheme="bearerAuth",
+ *   type="http",
+ *   scheme="bearer",
+ *   bearerFormat="JWT",
+ *   in="header",
+ *   name="Auth",
+ *   description="Enter JWT Bearer token **_only_**"
  * )
  */
