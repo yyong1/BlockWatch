@@ -43,7 +43,8 @@ class AuthService extends BaseService
             return Flight::json(['token' => $jwt, 'user' => [
                 'id' => $user['user_id'], 
                 'email' => $user['email'], 
-                'username' => $user['username']
+                'username' => $user['username'],
+                'token' => $jwt,
             ]]);
         } else {
             return Flight::halt(401, json_encode(['message' => 'Incorrect Credentials']));
@@ -74,13 +75,9 @@ class AuthService extends BaseService
         return Flight::json(['token' => $jwt, 'user' => [
             'id' => $user['id'], 
             'email' => $user['email'], 
-            'username' => $user['username']
+            'username' => $user['username'],
+            'token' => $jwt,
         ]]);
     }
 
-    public function logout()
-    {
-        setcookie('jwt', '', time() - 3600, '/');
-        return Flight::json(['message' => 'Logged out successfully']);
-    }
 }

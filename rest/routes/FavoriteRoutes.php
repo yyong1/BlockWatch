@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__ . '/../middleware/Auth.class.php');
+
 Flight::group('/favorite', function () {
   Flight::route('GET /@userId', function ($userId) {
     $data = Flight::favoriteService()->get_favorite($userId);
@@ -26,4 +28,4 @@ Flight::group('/favorite', function () {
       Flight::json(['message' => 'Invalid user ID or asset ID'], 400);
     }
   });
-});
+}, [new Auth()]);

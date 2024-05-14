@@ -39,6 +39,26 @@ class AssetService extends BaseService
         return $this->dao->get_asset_symbol();
     }
 
+    public function add_user_asset($userId, $assetId, $purchaseAmount)
+    {
+        return $this->dao->addUserAsset($userId, $assetId, $purchaseAmount);
+    }
+
+    public function get_user_assets($userId)
+    {
+        return $this->dao->getUserAssets($userId);
+    }
+
+    public function delete_user_asset($userId, $assetId)
+    {
+        return $this->dao->deleteUserAsset($userId, $assetId);
+    }
+
+    public function update_user_asset($id, $data)
+    {
+        return $this->dao->updateUserAsset($id, $data);
+    }
+
     public function update_database_asset()
     {
         $symbols = $this->dao->get_asset_symbol();

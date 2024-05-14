@@ -1,4 +1,5 @@
 <?php 
+require_once(__DIR__ . '/../middleware/Auth.class.php');
 
 Flight::group('/reviews', function () {
 
@@ -37,4 +38,4 @@ Flight::group('/reviews', function () {
         $review = $data['review'];
         return Flight::reviewService()->updateUserReview($id, $review);
     });
-});
+}, [new Auth()]);

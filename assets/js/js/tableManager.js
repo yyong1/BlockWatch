@@ -6,24 +6,15 @@ var TableManager = {
     },
 
     loadCryptoData: function () {
-        fetch('http://localhost:8888/BlockWatch/rest/assets/')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                this.populateTable(data);
-            })
-            .catch(error => console.error('Error loading the crypto data:', error));
+        RestClient.get('/assets', function (data) {
+            TableManager.populateTable(data);
+        });
     },
 
     populateTable: function (assets) {
         const tbody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
         tbody.innerHTML = '';
         assets.forEach((asset, index) => {
-            console.log(asset);
             const favoritedClass = asset.is_favorited ? 'fas' : 'far';
             const row = tbody.insertRow();
             row.innerHTML = `
@@ -48,35 +39,12 @@ var TableManager = {
             var userId = Utils.get_from_localstorage('user').id;
             var method = heartIcon.hasClass('fas') ? 'DELETE' : 'POST';
     
-            if (method === 'POST') {
-                _this.addFavorite(userId, assetId);
-            } else {
-                _this.removeFavorite(userId, assetId);
-            }
-            heartIcon.toggleClass('fas far');
-        });
-    },
-    
-    addFavorite: function (userId, assetId) {
-        fetch(`http://localhost:8888/BlockWatch/rest/favorite/${userId}/${assetId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        }).then(response => {
-            if (!response.ok) throw new Error('Failed to add favorite');
-            console.log('Added to favorites');
-        }).catch(error => {
-            console.error('Error adding favorite:', error);
-        });
-    },
-
-    removeFavorite: function (userId, assetId) {
-        fetch(`http://localhost:8888/BlockWatch/rest/favorite/${userId}/${assetId}`, {
-            method: 'DELETE'
-        }).then(response => {
-            if (!response.ok) throw new Error('Failed to remove favorite');
-            console.log('Removed from favorites');
-        }).catch(error => {
-            console.error('Error removing favorite:', error);
+            RestClient.request(`/favorite/${userId}/${assetId}`, method, {}, function(response) {
+                console.log(method === 'POST' ? 'Added to favorites' : 'Removed from favorites');
+                heartIcon.toggleClass('fas far');
+            }, function(error) {
+                console.error('Error toggling favorite:', error);
+            });
         });
     },
 
@@ -87,6 +55,5 @@ var TableManager = {
                 $(this).toggle($(this).find("td:nth-child(3)").text().toLowerCase().indexOf(searchText) > -1);
             });
         });
-    },
-
+    }
 };

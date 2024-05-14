@@ -4,17 +4,16 @@ var RestClient = {
       url: Constants.API_BASE_URL + url,
       type: "GET",
       beforeSend: function (xhr) {
-        if (Utils.get_from_localstorage("user")) {
-          xhr.setRequestHeader(
-            "Authentication",
-            Utils.get_from_localstorage("user").token
-          );
-        }
+        var token = Utils.get_from_localstorage("user").token;
+        console.log("Sending token: ", token);
+        xhr.setRequestHeader("Auth", "Bearer " + token);
       },
       success: function (response) {
+        console.log("AJAX Success: ", response);
         if (callback) callback(response);
       },
       error: function (jqXHR, textStatus, errorThrown) {
+        console.error("AJAX Error: ", textStatus, errorThrown);
         if (error_callback) error_callback(jqXHR);
       },
     });
@@ -27,8 +26,8 @@ var RestClient = {
       beforeSend: function (xhr) {
         if (Utils.get_from_localstorage("user")) {
           xhr.setRequestHeader(
-            "Authentication",
-            Utils.get_from_localstorage("user").token
+            "Auth",
+            "Bearer " + Utils.get_from_localstorage("user").token
           );
         }
       },
@@ -46,6 +45,9 @@ var RestClient = {
   },
   post: function (url, data, callback, error_callback) {
     RestClient.request(url, "POST", data, callback, error_callback);
+  },
+  patch: function (url, data, callback, error_callback) {
+    RestClient.request(url, "PATCH", data, callback, error_callback);
   },
   delete: function (url, data, callback, error_callback) {
     RestClient.request(url, "DELETE", data, callback, error_callback);

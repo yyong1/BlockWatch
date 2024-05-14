@@ -8,6 +8,10 @@ var SignInForm = {
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
         
+        if (typeof email === 'undefined' || typeof password === 'undefined') {
+            console.log("Removing user from local storage");
+            localStorage.removeItem('user');
+        }
         if (Utils.get_from_localstorage('user')) {
             console.log("User already logged in");
             location.replace('#stocklist');
