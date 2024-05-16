@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/spapp.css">
-  <link rel="stylesheet" href="assets/css/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/spapp.css">
+  <link rel="stylesheet" href="./assets/css/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./assets/css/css/fav.css">
+  <link rel="stylesheet" href="./assets/css/css/stockexchange.css">
+  <!-- <script src="assets/js/jQuery/script.js" defer></script>
+  <script src="assets/js/jQuery/account.js" defer></script> -->
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
   <title>BlockWatch</title>
 </head>
 <body>
@@ -13,65 +20,63 @@
   <header class="header-custom">
     <section class="flex-custom">
       <a href="#home" class="logo"><i class="fas fa-money-bill-trend-up"></i>BlockWatch</a>
-      <a href="#login" class="btn-custom">Auth</a>
+      <a id="top-login" href="#login" class="btn-custom">Auth</a>
     </section>
   </header>
 
   <div class="navbar-custom">
     <nav class="nav-custom">
-      <!-- <a href="#home" class="nav-link"><i class="fas fa-home"></i><span>home</span></a> -->
-      <a href="#about" class="nav-link"><i class="fas fa-circle-info"></i><span>about</span></a>
-      <a href="#download" class="nav-link"><i class="fas fa-download"></i><span>download</span></a>
-      <a href="#pricing" class="nav-link"><i class="fas fa-comment-dollar"></i><span>contact</span></a>
-      <a href="#login" class="nav-link"><i class="fas fa-user"></i><span>login</span></a>
+      <a id="nav-home" href="#home" class="nav-link"><i class="fas fa-house-user"></i><span>Home</span></a>
+      <a id="nav-stocklist" href="#stocklist" class="nav-link"><i class="fas fa-chart-line"></i><span>Stock-List</span></a>
+      <a id="nav-favorite" href="#favorite" class="nav-link"><i class="fas fa-heart"></i><span>Favorite</span></a>
+      <a id="nav-user" href="#change-password" class="nav-link" style="display:none;"><i class="fas fa-user"></i><span>User</span></a>
+      <a id="nav-login" href="#login" class="nav-link"><i class="fas fa-user"></i><span>Login</span></a>
     </nav>
   </div>
-
-  
 
   <main id="spapp" role="main">
     <section id="home" data-load="home.html"></section>
     <section id="login" data-load="login.html"></section>
     <section id="register" data-load="register.html"></section>
     <section id="account" data-load="account.html"></section>
-    <section id="stocklist" data-load="stocklist.html"></section>
-    <section id="fav" data-load="fav.html"></section>
-    <!-- <section id="error_404"><h1 class="text-info d-none">Page not found</h1></section> -->
+    <section id="stocklist" data-load="stockexchange.html"></section>
+    <section id="favorite" data-load="fav.html"></section>
+    <section id="change-password" data-load="change-password.html"></section>
   </main>
 
-  <footer class="footer">
-    <section class="box-container">
-      <div class="box">
-        <h3>quick search</h3>
-        <a href="#home"><i class="fas fa-angle-right"></i>home</a>
-        <a href="#about"><i class="fas fa-angle-right"></i>about</a>
-        <a href="#dowload"><i class="fas fa-angle-right"></i>dowload</a>
-        <a href="#pricing"><i class="fas fa-angle-right"></i>pricing</a>
-      </div>
+  <script src="./assets/js/jQuery/jQuery.js"></script>
+  <script src="./assets/js/jQuery/jquery.validate.js"></script>
+  <script src="./assets/js/jQuery/jquery.spapp.js"></script>
+  <script src="./assets/js/jQuery/spapp.js"></script>
+  <script src="./assets/js/jQuery/block-ui.js"></script>
+  <script src="./assets/js/jQuery/toastr.min.js"></script>
+  <script src="./assets/css/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-      <div class="box">
-        <h3>quick search</h3>
-        <a href="#home"><i class="fas fa-angle-right"></i>home</a>
-        <a href="#about"><i class="fas fa-angle-right"></i>about</a>
-        <a href="#dowload"><i class="fas fa-angle-right"></i>dowload</a>
-        <a href="#pricing"><i class="fas fa-angle-right"></i>pricing</a>
-      </div>
-      <div class="box">
-        <h3>quick search</h3>
-        <a href="tel:1234567890"><i class="fas fa-phone"></i>+1234567890</a>
-        <a href="mailto:example@mail.com"><i class="fas fa-envelope"></i>example@mail.com</a>
-      </div>
-    </section>
-  </footer>
+  <script src="./assets/js/utils/constants.js"></script>
+  <script src="./assets/js/utils/rest_client.js"></script>
+  <script src="./assets/js/utils/utils.js"></script>
 
-  <script src="assets/js/jQuery/jQuery.js"></script>
-  <script src="assets/js/jQuery/jquery.validate.js"></script>
-  <script src="assets/js/jQuery/jquery.spapp.js"></script>
-  <script src="assets/js/jQuery/spapp.js"></script>
-  <script src="assets/js/auth/login.js"></script>
-  <script src="assets/css/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="./assets/js/js/account.js"></script>
+  <script src="./assets/js/js/chartManager.js"></script>
+  <script src="./assets/js/js/tableManager.js"></script>
+  <script src="./assets/js/js/fav.js" defer></script>
+  <script src="./assets/js/js/changePassword.js"></script>
+  <script src="./assets/js/js/auth/login.js"></script>
+  <script src="./assets/js/js/auth/register.js"></script>
+  <script src="./assets/js/js/auth/authCheck.js" defer></script>
+  <script src="./assets/js/js/navControl.js"></script>
+  <script src="./assets/js/js/routeHandler.js"></script>
+  
+  <script src="./assets/js/js/script.js"></script>
+  <script src="./assets/js/js/stocks.js"></script>
+  
+  
+  <script>
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("loginTime");
+    }
 
-  <!-- sample data -->
-  <script src="assets/js/auth/userlog.json"></script>
+  </script>
 </body>
 </html>

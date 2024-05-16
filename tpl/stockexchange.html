@@ -1,0 +1,48 @@
+<section class="section market" aria-label="market update" data-section style="padding: 0;">
+    <div class="container">
+        <div class="container-fluid" style="margin-top:10px">
+            
+          <div id="tvchart"></div>
+          <div id="tvchart_detail">
+            BTC
+          </div>
+          <div class="form-group">
+            <input type="text"
+              class="form-control" name="search" id="search-filter" aria-describedby="helpId" placeholder="Search" style="height: 30px;">
+          </div>
+          
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table crypto-table" id="dataTable">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Symbol</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Supply</th>
+                      <th scope="col">Market Cap</th>
+                      <th scope="col">%(24h)</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <!-- insertion db data -->
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    </div>
+    <script>
+      $(document).ready(function () {
+        ChartManager.init();
+        TableManager.init();
+    });
+    </script>
+    
+</section>
+
+

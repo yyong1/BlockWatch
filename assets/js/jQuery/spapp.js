@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
-    $("main#spapp > section").width($(document).width());
-
+    // $("main#spapp > section").width($(document).width());
+    $("main#spapp > section").css("min-height", "100vh");
     var app = $.spapp({
         defaultView  : "home",
         // pageNotFound: 'error_404', 
@@ -25,7 +25,7 @@ $(document).ready(function () {
 
     app.route({
         view: "stocklist",
-        load: "stocklist.html",
+        load: "stockexchange.html",
     });
 
     app.route({
@@ -37,7 +37,6 @@ $(document).ready(function () {
         view: "account",
         load: "account.html",
     });
-
 
     app.run();
 

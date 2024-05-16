@@ -1,20 +1,47 @@
 <div class="form-section" id="auth">
-  <div class="container-form">
-      <div class="signin-signup">
-          <form action="" class="sign-in-form" id="sign-in-form">
-              <h2 class="title">Sign in</h2>
-              <div class="input-field">
-                  <i class="fas fa-user"></i>
-                  <input type="text" name="username" placeholder="Username" id="username">
-              </div>
-              <div class="input-field">
-                  <i class="fas fa-lock"></i>
-                  <input type="password" name="password" placeholder="Password" id="password">
+    <div class="container-form">
+        <div class="signin-signup">
+            <form class="sign-in-form" id="sign-in-form">
+                <h2 class="title">Sign in</h2>
+                <p id="error-call" style="display: none; color: red">
+                    Wrong User or Password
+                </p>
+                <p id="success-call" style="display: none; color: green">
+                    Login successful!
+                </p>
+                <div class="input-field">
+                    <i class="fas fa-envelope"></i>
+                    <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        placeholder="Email"
+                        id="email" />
                 </div>
-              <a href="#" class="forgot-password">Forgot password?</a>
-              <input type="submit" value="Login" class="btn-custom btn-form">
-              <p>Don't have an account? <a href="#" class="account-text" id="sign-up-link">Sign up</a></p>
-          </form>
-      </div>
-  </div>
+                <div class="input-field">
+                    <i class="fas fa-lock"></i>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Password"
+                        id="password" />
+                </div>
+                <button id="sign-in-btn" type="submit"
+                    class="btn-custom btn-form">
+                    Login
+                </button>
+                <p>
+                    Don't have an account?
+                    <a href="#register" class="account-text"
+                        id="sign-up-link">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
+<script>
+    $(document).ready(function () {
+        SignInForm.init();
+    });
+</script>
