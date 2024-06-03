@@ -7,7 +7,7 @@ var TableActions = {
     fetchFavorites: function () {
         var userId = Utils.get_from_localstorage('user').id;
         RestClient.get(`/favorite/${userId}`, function (response) {
-            TableActions.populateTable(response); // Call the function using the object name
+            TableActions.populateTable(response);
         }, function (error) {
             console.error('Error loading favorites:', error);
         });

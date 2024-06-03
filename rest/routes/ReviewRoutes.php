@@ -1,40 +1,41 @@
 <?php
 require_once(__DIR__ . '/../middleware/Auth.class.php');
 
+/**
+ * @OA\Get(
+ *     path="/reviews/",
+ *     tags={"Reviews"},
+ *     summary="Get the last five reviews",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Returns the last five reviews",
+ *         @OA\JsonContent(
+ *             type="array",
+ *             @OA\Items(ref="#/components/schemas/Review")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="No reviews found",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="message", type="string", example="No reviews found")
+ *         )
+ *     ),
+ *     security={{"bearerAuth": {}}}
+ * )
+ */
+Flight::route('GET /reviews', function () {
+    $data = Flight::reviewService()->getLastFiveReviews();
+    if (!empty($data)) {
+        Flight::json($data, 200);
+    } else {
+        Flight::json(['message' => 'No reviews found'], 404);
+    }
+});
+
 Flight::group('/reviews', function () {
 
-    /**
-     * @OA\Get(
-     *     path="/reviews/",
-     *     tags={"Reviews"},
-     *     summary="Get the last five reviews",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Returns the last five reviews",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Review")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="No reviews found",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="No reviews found")
-     *         )
-     *     ),
-     *     security={{"bearerAuth": {}}}
-     * )
-     */
-    Flight::route('GET /', function () {
-        $data = Flight::reviewService()->getLastFiveReviews();
-        if (!empty($data)) {
-            Flight::json($data, 200);
-        } else {
-            Flight::json(['message' => 'No reviews found'], 404);
-        }
-    });
     /**
      * @OA\Post(
      *     path="/reviews/",
@@ -94,7 +95,12 @@ Flight::group('/reviews', function () {
      * )
      */
     Flight::route('GET /@id', function ($id) {
-        return Flight::reviewService()->get_user_reviews($id);
+        $data = Flight::reviewService()->getUserReview($id);
+        if (!empty($data)) {
+            Flight::json($data, 200);
+        } else {
+            Flight::json(['message' => 'No reviews found'], 404);
+        }
     });
     /**
      * @OA\Patch(
