@@ -20,7 +20,7 @@ class ReviewDao extends BaseDao
 
     public function get_review_by_id($id)
     {
-        return $this->query_unique("SELECT r.review_id, u.username, r.rating, r.comment, r.reviewdate FROM reviews r WHERE id = :id", ['id' => $id]);
+        return $this->query_unique("SELECT * FROM reviews WHERE review_id = :id", ['id' => $id]);
     }
 
     public function add_new_review($review)
@@ -28,9 +28,17 @@ class ReviewDao extends BaseDao
         $this->add($review);
     }
 
-    public function update_review($id, $review)
+    public function update_review($id, $rating, $comment)
     {
-        $this->update($id, $review);
+        $this->query(
+            "UPDATE reviews
+             SET rating = :rating,
+             comment = :comment,
+             reviewdate = NOW()
+             WHERE review_id = :id;",
+             ['id' => $id, 'rating' => $rating, 'comment' => $comment]
+        );
+        return $this->get_review_by_id($id);
     }
 
     public function delete_review($id)

@@ -22,26 +22,24 @@ var RestClient = {
     $.ajax({
       url: Constants.API_BASE_URL + url,
       type: method,
-      data: data,
+      contentType: "application/json",
+      data: JSON.stringify(data),
       beforeSend: function (xhr) {
         if (Utils.get_from_localstorage("user")) {
-          xhr.setRequestHeader(
-            "Authorization",
-            "Bearer " + Utils.get_from_localstorage("user").token
-          );
+          xhr.setRequestHeader("Authorization", "Bearer " + Utils.get_from_localstorage("user").token);
         }
       },
-    })
-      .done(function (response, status, jqXHR) {
+      success: function (response) {
         if (callback) callback(response);
-      })
-      .fail(function (jqXHR, textStatus, errorThrown) {
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
         if (error_callback) {
           error_callback(jqXHR);
         } else {
-          toastr.error(jqXHR.responseJSON.message);
+          console.error(jqXHR.responseJSON.message);
         }
-      });
+      }
+    });
   },
   post: function (url, data, callback, error_callback) {
     RestClient.request(url, "POST", data, callback, error_callback);
@@ -54,5 +52,5 @@ var RestClient = {
   },
   put: function (url, data, callback, error_callback) {
     RestClient.request(url, "PUT", data, callback, error_callback);
-  },
+  }
 };

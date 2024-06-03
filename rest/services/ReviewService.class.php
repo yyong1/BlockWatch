@@ -24,14 +24,13 @@ class ReviewService extends BaseService
         return $this->dao->add_new_review($review);
     }
 
-    public function updateUserReview($id, $review)
+    public function updateUserReview($id, $rate, $review)
     {
-        $this->dao->update_review($id, $review);
+        return $this->dao->update_review($id, $rate, $review);
     }
 
     public function delete($id)
     {
         $this->dao->delete_review($id);
     }
-
 }

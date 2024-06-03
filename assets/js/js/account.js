@@ -1,3 +1,4 @@
+
 var AccountDetails = {
     init: function() {
         this.setupChangePasswordForm();
@@ -279,28 +280,46 @@ var AccountDetails = {
                 $('#feedback').val(review.comment);
                 $('#rate-app-form h2').text('Your Review');
                 $('#rate-app-form button[type="submit"]').text('Update Review');
+                $('#rate-app-form').data('reviewId', review.review_id);
             }
         }, function(error) {
             console.error('Error fetching user review:', error);
         });
     },
-
     submitFeedback: function(form) {
         var rating = $("#rating").val();
         var feedback = $("#feedback").val();
         var userId = Utils.get_from_localstorage("user").id;
-
-        RestClient.post("/reviews", {
-            user_id: userId,
-            rating: rating,
-            comment: feedback
-        }, function(response) {
-            alert("Thank you for your feedback!");
-            $("#rate-app-modal").hide();
-            form.reset();
-        }, function(error) {
-            alert("An error occurred. Please try again.");
-        });
+        var reviewId = $('#rate-app-form').data('reviewId');
+    
+        if (reviewId) {
+            console.log('Updating review:', reviewId, rating, feedback);
+    
+            RestClient.patch(`/reviews/${reviewId}`, {
+                rating: rating,
+                comment: feedback
+            }, function(response) {
+                alert("Your review has been updated!");
+                $("#rate-app-modal").hide();
+                form.reset();
+            }, function(error) {
+                console.log('Error updating review:', error);
+                alert("An error occurred. Please try again.");
+            });
+        } else {
+            RestClient.post("/reviews", {
+                user_id: userId,
+                rating: rating,
+                comment: feedback
+            }, function(response) {
+                alert("Thank you for your feedback!");
+                $("#rate-app-modal").hide();
+                form.reset();
+            }, function(error) {
+                alert("An error occurred. Please try again.");
+            });
+        }
         return false;
     }
+    
 };
