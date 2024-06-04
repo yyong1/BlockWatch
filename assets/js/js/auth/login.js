@@ -30,7 +30,7 @@ var SignInForm = {
         };
         console.log("userData", JSON.stringify(userData));
 
-        RestClient.post('/auth/login', JSON.stringify(userData), function (response) {
+        RestClient.post('/auth/login', userData, function (response) {
             console.log("Login successful", response);
             Utils.unblock_ui('#sign-in-form');
 
