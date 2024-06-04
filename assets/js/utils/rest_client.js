@@ -26,20 +26,24 @@ var RestClient = {
       data: JSON.stringify(data),
       beforeSend: function (xhr) {
         if (Utils.get_from_localstorage("user")) {
-          xhr.setRequestHeader("Authorization", "Bearer " + Utils.get_from_localstorage("user").token);
+          xhr.setRequestHeader(
+            "Authorization",
+            "Bearer " + Utils.get_from_localstorage("user").token
+          );
         }
+        console.log("Sending request: ", method, url, data);
       },
-      success: function (response) {
+    })
+      .done(function (response, status, jqXHR) {
         if (callback) callback(response);
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
         if (error_callback) {
           error_callback(jqXHR);
         } else {
-          console.error(jqXHR.responseJSON.message);
+          toastr.error(jqXHR.responseJSON.message);
         }
-      }
-    });
+      });
   },
   post: function (url, data, callback, error_callback) {
     RestClient.request(url, "POST", data, callback, error_callback);
@@ -52,5 +56,5 @@ var RestClient = {
   },
   put: function (url, data, callback, error_callback) {
     RestClient.request(url, "PUT", data, callback, error_callback);
-  }
+  },
 };

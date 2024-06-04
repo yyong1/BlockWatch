@@ -19,11 +19,7 @@ class Auth
         $user = Flight::authService()->findByEmail($payload['email']);
         if ($user) {
             $assetService = new AssetService();
-            try {
-                $assetService->update_database_asset();
-            } catch (Exception $e) {
-                error_log('Error updating database assets: ' . $e->getMessage());
-            }
+            $assetService->update_database_asset();
             unset($user['password']);
             return true;
         } else {

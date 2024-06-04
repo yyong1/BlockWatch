@@ -114,28 +114,30 @@ var AccountDetails = {
             var $row = $(this).closest('tr');
             var symbol = $row.find('td:eq(1)').text();
             var amount = $row.find('td:eq(2)').text();
-
+    
             $('#edit-crypto-symbol').val(symbol);
             $('#edit-amount').val(amount);
             $('#edit-asset-modal').data('assetId', userAssetId).show();
         });
-
+    
         $('.close-btn').click(function() {
             $('#edit-asset-modal').hide();
         });
-
+    
         $('#edit-asset-form').submit(function(event) {
             event.preventDefault();
             var userAssetId = $('#edit-asset-modal').data('assetId');
             var newAmount = $('#edit-amount').val();
-
+    
             if (!newAmount || isNaN(parseFloat(newAmount)) || parseFloat(newAmount) < 0) {
                 alert('Please enter a valid amount.');
                 return;
             }
-
-            console.log('Updating asset:', userAssetId, newAmount);
-            RestClient.patch(`/assets/userAsset/${userAssetId}`, { amount: newAmount }, function(response) {
+    
+            var requestData = { amount: parseFloat(newAmount) };
+            console.log('Updating asset:', userAssetId, requestData);
+    
+            RestClient.patch(`/assets/userAsset/${userAssetId}`, requestData, function(response) {
                 console.log('Asset updated successfully:', response);
                 $('#edit-asset-modal').hide();
                 AccountDetails.fetchUserAssets();
@@ -145,13 +147,15 @@ var AccountDetails = {
             });
         });
     },
+    
 
     setupDeleteAsset: function() {
         $(document).on('click', '.delete-btn', function() {
             var userAssetId = $(this).data('id');
+            var userId = Utils.get_from_localstorage('user').id;
             if (confirm('Are you sure you want to delete this asset?')) {
-                RestClient.delete(`/assets/userAsset/${userAssetId}`, function(response) {
-                    console.log('Asset deleted:', response);
+                RestClient.delete(`/assets/userAsset/${userId}/${userAssetId}`, function(response) {
+                    console.log('Asset deleted: ', response);
                     AccountDetails.fetchUserAssets();
                 }, function(error) {
                     console.error('Failed to delete asset:', error);
