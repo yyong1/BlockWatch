@@ -91,7 +91,7 @@ class AssetDao extends BaseDao
 
     public function getUserAssets($userId)
     {
-        $query = "SELECT ua.userasset_id, a.symbol, a.current_price, ua.purchaseamount, ua.purchasepriceusd
+        $query = "SELECT ua.userasset_id, ua.asset_id, a.symbol, a.current_price, ua.purchaseamount, ua.purchasepriceusd
                   FROM user_assets ua
                   JOIN assets a ON ua.asset_id = a.asset_id
                   WHERE ua.user_id = :userId";

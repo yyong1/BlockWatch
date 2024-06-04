@@ -4,28 +4,26 @@ require_once(__DIR__ . '/../middleware/Auth.class.php');
 Flight::group('/assets', function () {
     /**
      * @OA\Get(
-     *     path="/assets/",
-     *     tags={"Assets"},
-     *     summary="Retrieve all assets",
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of all assets",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Asset")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="No assets found",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="No assets found")
-     *         )
-     *     ),
-     *     security={{"bearerAuth": {}}}
+     *   path="/assets",
+     *   tags={"Assets"},
+     *   summary="Retrieve all assets",
+     *   description="This endpoint retrieves all assets.",
+     *   @OA\Response(
+     *     response=200,
+     *     description="Successful operation",
+     *     @OA\JsonContent(
+     *       type="array",
+     *       @OA\Items(ref="#/components/schemas/Asset")
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=401,
+     *     description="Unauthorized"
+     *   ),
+     *   security={{"bearerAuth":{}}}
      * )
      */
+
     Flight::route('GET /', function () {
         $data = Flight::assetService()->getAssets();
         if (!empty($data)) {
@@ -58,7 +56,6 @@ Flight::group('/assets', function () {
      *     security={{"bearerAuth": {}}}
      * )
      */
-
     Flight::route('GET /symbol', function () {
         $data = Flight::assetService()->get_asset_symbol();
         if (!empty($data)) {
@@ -91,6 +88,20 @@ Flight::group('/assets', function () {
      *             @OA\Property(property="message", type="string", example="Error in creating asset")
      *         )
      *     ),
+     * @OA\RequestBody(
+     *          required=true,
+     *          description="Asset data to be created",
+     *          @OA\JsonContent(
+     *              required={"symbol", "name", "current_price", "market_cap", "percent_change_24h", "supply"},
+     *              @OA\Property(property="symbol", type="string", example="TRX"),
+     *              @OA\Property(property="name", type="string", example="TRON"),
+     *              @OA\Property(property="current_price", type="string", example="0.1269"),
+     *              @OA\Property(property="market_cap", type="string", example="11105210000"),
+     *              @OA\Property(property="percent_change_24h", type="string"),
+     *              @OA\Property(property="supply", type="string", example="133354700")
+     *          )
+     *      ),
+     *          
      *     security={{"bearerAuth": {}}}
      * )
      */
@@ -218,41 +229,57 @@ Flight::group('/assets', function () {
         }
     });
     /**
-     * @OA\Get(
-     *     path="/assets/userAsset/{userId}",
-     *     tags={"User Assets"},
-     *     summary="Retrieve all assets assigned to a user",
-     *     @OA\Parameter(
-     *         name="userId",
-     *         in="path",
-     *         required=true,
-     *         description="User ID",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of user assets",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/UserAsset")
-     *         )
-     *     ),
-     *     security={{"bearerAuth": {}}}
-     * )
-     */
-    Flight::route('GET /userAsset/@userId', function ($userId) {
-        $data = Flight::assetService()->get_user_assets($userId);
+ * @OA\Get(
+ *     path="/assets/userAsset/{userId}",
+ *     tags={"User Assets"},
+ *     summary="Retrieve all assets assigned to a user",
+ *     @OA\Parameter(
+ *         name="userId",
+ *         in="path",
+ *         required=true,
+ *         description="User ID",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="List of user assets",
+ *         @OA\JsonContent(
+ *             type="array",
+ *             @OA\Items(ref="#/components/schemas/UserAsset")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="No assets found for the user",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="message", type="string", example="No assets found for this user")
+ *         )
+ *     ),
+ *     security={{"bearerAuth": {}}}
+ * )
+ */
+Flight::route('GET /userAsset/@userId', function ($userId) {
+    $data = Flight::assetService()->get_user_assets($userId);
+    if ($data) {
         Flight::json($data, 200);
-    });
+    } else {
+        Flight::json(['message' => 'No assets found for this user'], 404);
+    }
+});
+
     /**
      * @OA\Patch(
-     *     path="/assets",
+     *     path="/assets/userAsset/{userId}/{assetId}",
      *     tags={"Assets"},
      *     summary="Update an asset",
      *     @OA\RequestBody(
      *         description="Asset data to update",
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/Asset")
+     *         @OA\JsonContent(
+     *             required={"amount"},
+     *             @OA\Property(property="amount", type="number", example=77)
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -288,15 +315,22 @@ Flight::group('/assets', function () {
 
     /**
      * @OA\Delete(
-     *     path="/assets/{id}",
+     *     path="/assets/userAsset/{userId}/{assetId}",
      *     tags={"Assets"},
-     *     summary="Delete an asset",
+     *     summary="Delete an asset assigned to a user",
      *     @OA\Parameter(
-     *         name="id",
+     *         name="userId",
      *         in="path",
      *         required=true,
-     *         @OA\Schema(type="integer"),
-     *         description="Asset ID"
+     *         description="User ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="assetId",
+     *         in="path",
+     *         required=true,
+     *         description="Asset ID",
+     *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -304,6 +338,14 @@ Flight::group('/assets', function () {
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="message", type="string", example="Asset deleted")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Asset or user not found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Asset or user not found")
      *         )
      *     ),
      *     security={{"bearerAuth": {}}}

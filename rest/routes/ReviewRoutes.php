@@ -1,40 +1,42 @@
 <?php
 require_once(__DIR__ . '/../middleware/Auth.class.php');
+require_once(__DIR__ . '/../services/ReviewService.class.php');
+
+/**
+ * @OA\Get(
+ *     path="/reviews/",
+ *     tags={"Reviews"},
+ *     summary="Get the last five reviews",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Returns the last five reviews",
+ *         @OA\JsonContent(
+ *             type="array",
+ *             @OA\Items(ref="#/components/schemas/Review")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="No reviews found",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(property="message", type="string", example="No reviews found")
+ *         )
+ *     ),
+ *     security={{"bearerAuth": {}}}
+ * )
+ */
+Flight::route('GET /reviews', function () {
+    $data = Flight::reviewService()->getLastFiveReviews();
+    if (!empty($data)) {
+        Flight::json($data, 200);
+    } else {
+        Flight::json(['message' => 'No reviews found'], 404);
+    }
+});
 
 Flight::group('/reviews', function () {
 
-    /**
-     * @OA\Get(
-     *     path="/reviews/",
-     *     tags={"Reviews"},
-     *     summary="Get the last five reviews",
-     *     @OA\Response(
-     *         response=200,
-     *         description="Returns the last five reviews",
-     *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Review")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="No reviews found",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="No reviews found")
-     *         )
-     *     ),
-     *     security={{"bearerAuth": {}}}
-     * )
-     */
-    Flight::route('GET /', function () {
-        $data = Flight::reviewService()->getLastFiveReviews();
-        if (!empty($data)) {
-            Flight::json($data, 200);
-        } else {
-            Flight::json(['message' => 'No reviews found'], 404);
-        }
-    });
     /**
      * @OA\Post(
      *     path="/reviews/",
@@ -94,27 +96,39 @@ Flight::group('/reviews', function () {
      * )
      */
     Flight::route('GET /@id', function ($id) {
-        return Flight::reviewService()->get_user_reviews($id);
+        $data = Flight::reviewService()->getUserReview($id);
+        if (!empty($data)) {
+            Flight::json($data, 200);
+        } else {
+            Flight::json(['message' => 'No reviews found'], 404);
+        }
     });
     /**
      * @OA\Patch(
-     *     path="/reviews/",
+     *     path="/reviews/{id}",
      *     tags={"Reviews"},
      *     summary="Update a review",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Review ID to update",
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Review ID and updated data",
+     *         description="Review data to update",
      *         @OA\JsonContent(
      *             type="object",
-     *             required=["id", "review"],
+     *             required={"rating", "comment"},
      *             properties={
-     *                 "id": {
+     *                 "rating": {
      *                     type="integer",
-     *                     description="Review ID to update"
+     *                     description="Updated rating"
      *                 },
-     *                 "review": {
+     *                 "comment": {
      *                     type="string",
-     *                     description="Updated review text"
+     *                     description="Updated comment"
      *                 }
      *             }
      *         )
@@ -135,10 +149,20 @@ Flight::group('/reviews', function () {
      *     security={{"bearerAuth": {}}}
      * )
      */
-    Flight::route('PATCH /', function () {
+    Flight::route('PATCH /@id', function ($id) {
         $data = Flight::request()->data->getData();
-        $id = $data['id'];
-        $review = $data['review'];
-        return Flight::reviewService()->updateUserReview($id, $review);
+        $rating = $data['rating'];
+        $comment = $data['comment'];
+    
+        if ($id && $rating && $comment) {
+            $condition = Flight::reviewService()->updateUserReview($id, $rating, $comment);
+            if ($condition) {
+                Flight::json(['message' => 'Review updated'], 200);
+            } else {
+                Flight::json(['message' => 'Review not updated'], 400);
+            }
+        } else {
+            Flight::json(['message' => 'Invalid review data provided'], 400);
+        }
     });
 }, [new Auth()]);

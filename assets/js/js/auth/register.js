@@ -17,7 +17,7 @@ var SignUpForm = {
             password: password
         };
 
-        RestClient.post('/auth/signup', JSON.stringify(newUser), function (response) {
+        RestClient.post('/auth/signup', newUser, function (response) {
             Utils.unblock_ui('#sign-up-form');
             console.log("Reg successful", response);
             localStorage.setItem('user', JSON.stringify(response.user));

@@ -6,7 +6,7 @@ var RestClient = {
       beforeSend: function (xhr) {
         var token = Utils.get_from_localstorage("user").token;
         console.log("Sending token: ", token);
-        xhr.setRequestHeader("Auth", "Bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
       },
       success: function (response) {
         console.log("AJAX Success: ", response);
@@ -22,14 +22,16 @@ var RestClient = {
     $.ajax({
       url: Constants.API_BASE_URL + url,
       type: method,
-      data: data,
+      contentType: "application/json",
+      data: JSON.stringify(data),
       beforeSend: function (xhr) {
         if (Utils.get_from_localstorage("user")) {
           xhr.setRequestHeader(
-            "Auth",
+            "Authorization",
             "Bearer " + Utils.get_from_localstorage("user").token
           );
         }
+        console.log("Sending request: ", method, url, data);
       },
     })
       .done(function (response, status, jqXHR) {

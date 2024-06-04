@@ -605,15 +605,33 @@ a {
 .account-text {
   color: var(--white);
 }
-/* Make the sign-up form visible when in sign-up mode */
+
 .container.sign-up-mode form.sign-up-form {
   visibility: visible;
 }
-/* Hide the sign-in form when in sign-up mode */
+
 .container.sign-up-mode form.sign-in-form {
   visibility: hidden;
 }
 
+.highlight-text {
+  color: #ffffff;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+#user-assets-section h2 {
+  color: #ffffff;
+}
+
+#total-earned {
+  color: #ffffff;
+}
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+}
 
 
 /* --- media queries --- */
