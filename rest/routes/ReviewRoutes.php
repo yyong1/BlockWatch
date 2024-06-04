@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../middleware/Auth.class.php');
+require_once(__DIR__ . '/../services/ReviewService.class.php');
 
 /**
  * @OA\Get(

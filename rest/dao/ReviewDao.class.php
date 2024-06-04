@@ -14,8 +14,7 @@ class ReviewDao extends BaseDao
         FROM reviews r
         JOIN users u ON r.user_id = u.user_id
         ORDER BY r.reviewdate DESC
-        LIMIT 5;
-        ");
+        LIMIT 5;");
     }
 
     public function get_review_by_id($id)

@@ -1,6 +1,6 @@
 
 var AccountDetails = {
-    init: function() {
+    init: function () {
         this.setupChangePasswordForm();
         this.addNewUserAsset();
         this.fetchUserAssets();
@@ -11,12 +11,12 @@ var AccountDetails = {
         this.checkUserReview();
     },
 
-    setupChangePasswordForm: function() {
-        $('#change-password-modal-btn').click(function() {
+    setupChangePasswordForm: function () {
+        $('#change-password-modal-btn').click(function () {
             $('#section-change-pass').toggle();
         });
 
-        $('#change-password-form').submit(function(event) {
+        $('#change-password-form').submit(function (event) {
             event.preventDefault();
             var currentPassword = $('#current').val();
             var newPassword = $('#password').val();
@@ -34,25 +34,25 @@ var AccountDetails = {
         });
     },
 
-    addNewUserAsset: function() {
-        $('#open-modal-btn').click(function() {
+    addNewUserAsset: function () {
+        $('#open-modal-btn').click(function () {
             $('#crypto-modal').show();
         });
 
-        $('.close-btn').click(function() {
+        $('.close-btn').click(function () {
             $('#crypto-modal').hide();
         });
 
-        $('#crypto-symbol').on('input', function() {
+        $('#crypto-symbol').on('input', function () {
             var input = $(this).val();
             var dropdown = $('#crypto-results');
             dropdown.empty().show();
 
-            RestClient.get('/assets/symbol', function(cryptos) {
-                cryptos.forEach(function(crypto) {
+            RestClient.get('/assets/symbol', function (cryptos) {
+                cryptos.forEach(function (crypto) {
                     if (crypto.symbol.toLowerCase().includes(input.toLowerCase())) {
                         var li = $('<li>').text(crypto.symbol).data('assetId', crypto.asset_id).appendTo(dropdown);
-                        li.click(function() {
+                        li.click(function () {
                             $('#crypto-symbol').val($(this).text()).data('assetId', $(this).data('assetId'));
                             dropdown.hide();
                         });
@@ -65,29 +65,30 @@ var AccountDetails = {
             });
         });
 
-        $('#crypto-form').submit(function(event) {
+        $('#crypto-form').submit(function (event) {
             event.preventDefault();
             var userId = Utils.get_from_localstorage('user').id;
             var amount = $('#amount').val();
             var assetId = $('#crypto-symbol').data('assetId');
 
             console.log('Adding asset:', userId, assetId, amount);
-            RestClient.post(`/assets/userAsset/${userId}/${assetId}`, { amount: amount }, function(response) {
+            RestClient.post(`/assets/userAsset/${userId}/${assetId}`, { amount: amount }, function (response) {
                 console.log('Asset added:', response);
                 $('#crypto-modal').hide();
                 AccountDetails.fetchUserAssets();
-            }, function(error) {
+            }, function (error) {
                 console.error('Error adding asset:', error);
             });
         });
     },
 
-    fetchUserAssets: function() {
+    fetchUserAssets: function () {
         const userId = Utils.get_from_localstorage('user').id;
-        RestClient.get(`/assets/userAsset/${userId}`, function(data) {
+        RestClient.get(`/assets/userAsset/${userId}`, function (data) {
             var totalEarned = 0;
             $('#user-assets-table tbody').empty();
-            data.forEach(function(asset, index) {
+            data.forEach(function (asset, index) {
+                console.log('Asset: ---->', asset);
                 var totalValue = (parseFloat(asset.purchaseamount) * parseFloat(asset.purchasepriceusd)).toFixed(2);
                 totalEarned += parseFloat(totalValue);
                 $('#user-assets-table tbody').append(
@@ -98,87 +99,96 @@ var AccountDetails = {
                         <td>$${asset.purchasepriceusd}</td>
                         <td>$${totalValue}</td>
                         <td><button class="edit-btn" data-id="${asset.userasset_id}">Edit</button></td>
-                        <td><button class="delete-btn" data-id="${asset.userasset_id}">Delete</button></td>
+                        <td><button class="delete-btn" data-userasset-id="${asset.userasset_id}" data-asset-id="${asset.asset_id}">Delete</button></td>
                     </tr>`
                 );
             });
             $('#total-earned').text(`Total Earned: $${totalEarned.toFixed(2)}`);
-        }, function(error) {
+        }, function (error) {
             console.error('Error fetching assets:', error);
         });
     },
 
-    setupEditAssetModal: function() {
-        $(document).on('click', '.edit-btn', function() {
+
+    setupEditAssetModal: function () {
+        $(document).on('click', '.edit-btn', function () {
             var userAssetId = $(this).data('id');
             var $row = $(this).closest('tr');
             var symbol = $row.find('td:eq(1)').text();
             var amount = $row.find('td:eq(2)').text();
-    
+
             $('#edit-crypto-symbol').val(symbol);
             $('#edit-amount').val(amount);
             $('#edit-asset-modal').data('assetId', userAssetId).show();
         });
-    
-        $('.close-btn').click(function() {
+
+        $('.close-btn').click(function () {
             $('#edit-asset-modal').hide();
         });
-    
-        $('#edit-asset-form').submit(function(event) {
+
+        $('#edit-asset-form').submit(function (event) {
             event.preventDefault();
             var userAssetId = $('#edit-asset-modal').data('assetId');
             var newAmount = $('#edit-amount').val();
-    
+
             if (!newAmount || isNaN(parseFloat(newAmount)) || parseFloat(newAmount) < 0) {
                 alert('Please enter a valid amount.');
                 return;
             }
-    
+
             var requestData = { amount: parseFloat(newAmount) };
             console.log('Updating asset:', userAssetId, requestData);
-    
-            RestClient.patch(`/assets/userAsset/${userAssetId}`, requestData, function(response) {
+
+            RestClient.patch(`/assets/userAsset/${userAssetId}`, requestData, function (response) {
                 console.log('Asset updated successfully:', response);
                 $('#edit-asset-modal').hide();
                 AccountDetails.fetchUserAssets();
-            }, function(error) {
+            }, function (error) {
                 console.error('Failed to update asset:', error);
                 alert('Failed to update asset. Please try again.');
             });
         });
     },
-    
 
-    setupDeleteAsset: function() {
-        $(document).on('click', '.delete-btn', function() {
-            var userAssetId = $(this).data('id');
+
+    setupDeleteAsset: function () {
+        $(document).on('click', '.delete-btn', function () {
+            var userAssetId = $(this).data('userasset-id');
+            var assetId = $(this).data('asset-id');
             var userId = Utils.get_from_localstorage('user').id;
+            console.log('Deleting asset:', userAssetId, assetId, userId);
             if (confirm('Are you sure you want to delete this asset?')) {
-                RestClient.delete(`/assets/userAsset/${userId}/${userAssetId}`, function(response) {
+                RestClient.delete(`/assets/userAsset/${userId}/${assetId}`, function (response) {
                     console.log('Asset deleted: ', response);
                     AccountDetails.fetchUserAssets();
-                }, function(error) {
+                }, function (error) {
                     console.error('Failed to delete asset:', error);
-                    alert('Failed to delete asset. Please try again.');
+                    if (error.status !== 200) {
+                        alert('Failed to delete asset. Please try again.');
+                    } else {
+                        console.log('Asset deleted successfully despite error callback.');
+                        AccountDetails.fetchUserAssets();
+                    }
                 });
             }
         });
     },
 
-    bindUIActions: function() {
+
+    bindUIActions: function () {
         $('#rate-app-modal-btn').click(this.showRateModal.bind(this));
         $('.close-btn').click(this.closeModal.bind(this));
     },
 
-    showRateModal: function() {
+    showRateModal: function () {
         $('#rate-app-modal').show();
     },
 
-    closeModal: function(event) {
+    closeModal: function (event) {
         $(event.currentTarget).closest('.modal').hide();
     },
 
-    initValidation: function() {
+    initValidation: function () {
         $("#rate-app-form").validate({
             rules: {
                 rating: {
@@ -275,9 +285,9 @@ var AccountDetails = {
         });
     },
 
-    checkUserReview: function() {
+    checkUserReview: function () {
         var userId = Utils.get_from_localstorage("user").id;
-        RestClient.get(`/reviews/${userId}`, function(response) {
+        RestClient.get(`/reviews/${userId}`, function (response) {
             if (response && response.length > 0) {
                 var review = response[0];
                 $('#rating').val(review.rating);
@@ -286,27 +296,28 @@ var AccountDetails = {
                 $('#rate-app-form button[type="submit"]').text('Update Review');
                 $('#rate-app-form').data('reviewId', review.review_id);
             }
-        }, function(error) {
+        }, function (error) {
             console.error('Error fetching user review:', error);
         });
     },
-    submitFeedback: function(form) {
+    submitFeedback: function (form) {
         var rating = $("#rating").val();
         var feedback = $("#feedback").val();
         var userId = Utils.get_from_localstorage("user").id;
         var reviewId = $('#rate-app-form').data('reviewId');
-    
+
         if (reviewId) {
             console.log('Updating review:', reviewId, rating, feedback);
-    
+
             RestClient.patch(`/reviews/${reviewId}`, {
                 rating: rating,
                 comment: feedback
-            }, function(response) {
+            }, function (response) {
                 alert("Your review has been updated!");
                 $("#rate-app-modal").hide();
                 form.reset();
-            }, function(error) {
+                AccountDetails.checkUserReview()
+            }, function (error) {
                 console.log('Error updating review:', error);
                 alert("An error occurred. Please try again.");
             });
@@ -315,15 +326,15 @@ var AccountDetails = {
                 user_id: userId,
                 rating: rating,
                 comment: feedback
-            }, function(response) {
+            }, function (response) {
                 alert("Thank you for your feedback!");
                 $("#rate-app-modal").hide();
                 form.reset();
-            }, function(error) {
+            }, function (error) {
                 alert("An error occurred. Please try again.");
             });
         }
         return false;
     }
-    
+
 };
