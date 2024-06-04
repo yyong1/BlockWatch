@@ -6,5 +6,5 @@ var Constants = {
       return "https://web-blockwatch-q785y.ondigitalocean.app/rest";
     }
   },
-  API_BASE_URL: this.get_api_base_url(),
+  API_BASE_URL: Constants.get_api_base_url(),
 };
